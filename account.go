@@ -13,6 +13,10 @@ func (c *Client) AccountBalance(address string) (balance *BigInt, err error) {
 		"tag":     "latest",
 		"address": address,
 	}
+	if c.isConfluxScan() {
+		param["tag"] = "latest_state"
+	}
+
 	balance = new(BigInt)
 	err = c.call("account", "balance", param, balance)
 	return
@@ -24,6 +28,10 @@ func (c *Client) MultiAccountBalance(addresses ...string) (balances []AccountBal
 		"tag":     "latest",
 		"address": addresses,
 	}
+	if c.isConfluxScan() {
+		param["tag"] = "latest_state"
+	}
+
 	balances = make([]AccountBalance, 0, len(addresses))
 	err = c.call("account", "balancemulti", param, &balances)
 	return

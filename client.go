@@ -15,15 +15,17 @@ import (
 	"net/http"
 	"net/http/httputil"
 	"net/url"
+	"strings"
 	"time"
 )
 
 // Client etherscan API client
 // Clients are safe for concurrent use by multiple goroutines.
 type Client struct {
-	coon    *http.Client
-	key     string
-	baseURL string
+	coon      *http.Client
+	key       string
+	baseURL   string
+	ChainName string
 
 	// Verbose when true, talks a lot
 	Verbose bool
@@ -61,6 +63,8 @@ type Customization struct {
 	// Set your own timeout.
 	Client *http.Client
 
+	ChainName string
+
 	// BeforeRequest runs before every client request, in the same goroutine.
 	// May be used in rate limit.
 	// Request will be aborted, if BeforeRequest returns non-nil err.
@@ -85,6 +89,7 @@ func NewCustomized(config Customization) *Client {
 		coon:          httpClient,
 		key:           config.Key,
 		baseURL:       config.BaseURL,
+		ChainName:     config.ChainName,
 		Verbose:       config.Verbose,
 		BeforeRequest: config.BeforeRequest,
 		AfterRequest:  config.AfterRequest,
@@ -205,4 +210,9 @@ func (c *Client) craftURL(module, action string, param map[string]interface{}) (
 
 	URL = c.baseURL + q.Encode()
 	return
+}
+
+// isConfluxScan returns whether conflux scan API which has some API update
+func (c *Client) isConfluxScan() bool {
+	return strings.EqualFold(c.ChainName, "Conflux")
 }
