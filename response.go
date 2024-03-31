@@ -41,14 +41,14 @@ type NormalTx struct {
 	From              string  `json:"from"`
 	To                string  `json:"to"`
 	Value             *BigInt `json:"value"`
-	Gas               int     `json:"gas,string"`
+	Gas               *BigInt `json:"gas"`
 	GasPrice          *BigInt `json:"gasPrice"`
 	IsError           int     `json:"isError,string"`
 	TxReceiptStatus   string  `json:"txreceipt_status"`
 	Input             string  `json:"input"`
 	ContractAddress   string  `json:"contractAddress"`
-	CumulativeGasUsed int     `json:"cumulativeGasUsed,string"`
-	GasUsed           int     `json:"gasUsed,string"`
+	CumulativeGasUsed *BigInt `json:"cumulativeGasUsed"`
+	GasUsed           *BigInt `json:"gasUsed"`
 	Confirmations     int     `json:"confirmations,string"`
 	FunctionName      string  `json:"functionName"`
 	MethodId          string  `json:"methodId"`
